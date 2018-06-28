@@ -4,13 +4,8 @@ ENV DKRON_VERSION 0.10.3
 
 RUN set -eux; \
 	\
-	fetchDeps=' \
-		ca-certificates \
-		wget \
-		openssl \
-	'; \
 	apt-get update; \
-	apt-get install -y --no-install-recommends $fetchDeps; \
+	apt-get install -y --no-install-recommends ca-certificates wget openssl awscli jq; \
 	\
 	mkdir -p /opt/local/dkron; \
 	cd /opt/local/dkron; \
@@ -19,8 +14,6 @@ RUN set -eux; \
 	tar -xzf dkron.tar.gz; \
 	rm /opt/local/dkron/dkron.tar.gz; \
 	\
-	apt-get purge -y --auto-remove $fetchDeps; \
-	apt-get install -y --no-install-recommends awscli jq; \
 	rm -rf /var/lib/apt/lists/*;
 
 ENV SHELL /bin/bash

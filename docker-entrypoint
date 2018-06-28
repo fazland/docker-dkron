@@ -4,10 +4,12 @@ set -eux
 
 export EC2_JOIN=
 function ec2_members() {
-    local ec2_meta=$(aws ec2 describe-instances &> /dev/null && echo "on" || echo "off")
-    if [ $ec2_meta == "off" ]; then
+    if [ -z ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI+x} ]; then
         return
     fi
+
+    mkdir -p ~/.aws
+    wget 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -O ~/.aws/credentials
 
     AWS_TAG=${AWS_TAG:=dkron=member}
 
