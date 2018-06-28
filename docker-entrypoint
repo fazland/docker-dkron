@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+
+export EC2_JOIN=
+function ec2_members() {
+    local ec2_meta=$(nc -v -z -w 3 169.254.169.254 80 &> /dev/null && echo "on" || echo "off")
+    if [ $ec2_meta == "off" ]; then
+        return
+    fi
+
+    AWS_TAG=${AWS_TAG:=dkron=member}
+
+    AWS_TAG_NAME=$(echo $AWS_TAG | cut -f1 -d=)
+    AWS_TAG_VALUE=$(echo $AWS_TAG | cut -f2 -d=)
+
+    export EC2_JOIN=$(aws ec2 describe-instances --filters Name=tag:${AWS_TAG_NAME},Values=${AWS_TAG_VALUE} | jq ".Reservations | map(.Instances)[][].PrivateIpAddress" | cut -f2 -d'"' | paste -sd " --join " -)
+}
+
+ec2_members
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+	set -- /opt/local/dkron/dkron "$@"
+fi
+
+exec "$@"
