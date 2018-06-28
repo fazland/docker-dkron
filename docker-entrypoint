@@ -19,7 +19,7 @@ function ec2_members() {
     AWS_TAG_VALUE=$(echo $AWS_TAG | cut -f2 -d=)
 
     EC2_JOIN=$(aws ec2 describe-instances --filters Name=tag:${AWS_TAG_NAME},Values=${AWS_TAG_VALUE} | jq ".Reservations | map(.Instances)[][].PrivateIpAddress" | cut -f2 -d'"' | paste -sd ";" - | sed -e "s/;/ --join /g")
-    if [ -n ${EC2_JOIN} ]; then
+    if [ -n "$EC2_JOIN" ]; then
         EC2_JOIN=$(echo " --join $EC2_JOIN")
     fi
 }
