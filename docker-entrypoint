@@ -4,7 +4,7 @@ set -e
 
 export EC2_JOIN=
 function ec2_members() {
-    local ec2_meta=$(nc -v -z -w 3 169.254.169.254 80 &> /dev/null && echo "on" || echo "off")
+    local ec2_meta=$(aws ec2 describe-instances &> /dev/null && echo "on" || echo "off")
     if [ $ec2_meta == "off" ]; then
         return
     fi
