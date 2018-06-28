@@ -8,8 +8,12 @@ function ec2_members() {
         return
     fi
 
+    local region=$(wget http://169.254.169.254/latest/meta-data/placement/availability-zone -q -O- | sed 's/[a-z]$//')
+
     mkdir -p ~/.aws
-    wget 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI -O ~/.aws/credentials
+    echo "[default]" > ~/.aws/config
+    echo "output = json" >> ~/.aws/config
+    echo "region = $region" >> ~/.aws/config
 
     AWS_TAG=${AWS_TAG:=dkron=member}
 
