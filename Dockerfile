@@ -25,7 +25,7 @@ RUN chmod +x /usr/local/bin/ecs-run
 ADD docker-entrypoint /opt/local/dkron/
 RUN chmod +x /opt/local/dkron/docker-entrypoint
 
-EXPOSE 8080 8946
+EXPOSE 8080 8946 6868
 
 ENTRYPOINT ["/opt/local/dkron/docker-entrypoint"]
 CMD ["--help"]

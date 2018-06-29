@@ -16,6 +16,10 @@ port:
     listening: true
     ip:
     - '::'
+  tcp6:6868:
+    listening: true
+    ip:
+    - '::'
 command:
   ecs-run:
     exit-status: 2
