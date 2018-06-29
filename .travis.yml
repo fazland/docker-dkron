@@ -1,0 +1,13 @@
+sudo: required
+
+services:
+    - docker
+
+before_install:
+    - curl -fsSL https://goss.rocks/install | sh
+    - docker network create mynet
+    - docker run --net mynet -h zk.internal --name zk -d zookeeper
+    - docker build -t docker-dkron
+
+script:
+    - dgoss run --link zk:zk.internal --net mynet -it dkron agent --server --backend zk --backend-machine zk.internal:2181

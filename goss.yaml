@@ -1,0 +1,33 @@
+file:
+  /opt/local/dkron/docker-entrypoint:
+    exists: true
+    mode: "0775"
+package:
+  awscli:
+    installed: true
+  jq:
+    installed: true
+port:
+  tcp6:8080:
+    listening: true
+    ip:
+    - '::'
+  tcp6:8946:
+    listening: true
+    ip:
+    - '::'
+command:
+  ecs-run:
+    exit-status: 2
+    stdout:
+    - '##### ecs-run #####'
+    stderr: []
+    timeout: 10000
+process:
+  dkron:
+    running: true
+http:
+  http://localhost:8080/dashboard/:
+    status: 200
+    timeout: 5000
+    body: []
