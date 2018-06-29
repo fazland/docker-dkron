@@ -4,10 +4,10 @@ services:
     - docker
 
 before_install:
-    - curl -fsSL https://goss.rocks/install | sh
+    - curl -fsSL https://goss.rocks/install | sudo sh
     - docker network create mynet
     - docker run --net mynet -h zk.internal --name zk -d zookeeper
-    - docker build -t docker-dkron
+    - docker build -t docker-dkron .
 
 script:
-    - dgoss run --link zk:zk.internal --net mynet -it dkron agent --server --backend zk --backend-machine zk.internal:2181
+    - dgoss run --link zk:zk.internal --net mynet -it docker-dkron agent --server --backend zk --backend-machine zk.internal:2181
