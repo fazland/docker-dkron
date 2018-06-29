@@ -11,3 +11,6 @@ before_install:
 
 script:
     - dgoss run --link zk:zk.internal --net mynet -it docker-dkron agent --server --backend zk --backend-machine zk.internal:2181
+
+after_success:
+    - "curl -H \"Content-Type: application/json\" --data '{\"docker_tag\": \"$TRAVIS_BRANCH\"}' -X POST $DOCKER_HUB_ENDPOINT"
